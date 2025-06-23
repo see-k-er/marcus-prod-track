@@ -6,6 +6,10 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from dotenv import load_dotenv
 import os
+from app.routes.worker import worker_bp
+from app.routes.admin import admin_bp
+from app.routes.management import management_bp
+
 
 # Load environment variables from .env
 load_dotenv()
@@ -18,21 +22,36 @@ login_manager = LoginManager()
 def create_app():
     app = Flask(__name__)
     
-    # Load config from environment
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # Initialize extensions with app
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
 
-    # Import and register routes here later
-    # from .routes.worker_routes import worker_bp
-    # app.register_blueprint(worker_bp)
+    # 👇 Move this here to avoid circular import
+    from app.models import User
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
+    login_manager.login_view = 'auth.login'
+
+    # Register Blueprints
+    from app.routes.auth import auth_bp
+    from app.routes.worker import worker_bp
+    from app.routes.admin import admin_bp
+    from app.routes.management import management_bp
+
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(worker_bp)
+    app.register_blueprint(admin_bp)
+    app.register_blueprint(management_bp)
 
     return app
 
-app.config.from_object('config.Config')
+
+#app.config.from_object('config.Config')
 
