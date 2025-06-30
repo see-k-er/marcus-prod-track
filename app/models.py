@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from flask_login import UserMixin
-from . import db
+from app.extensions import db
 
 ### 1. Department ###
 class Department(db.Model):

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create User</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2em;
+        }
+
+        h2 {
+            margin-bottom: 1em;
+        }
+
+        .flash-message {
+            padding: 0.75em;
+            margin-bottom: 1em;
+            border-radius: 5px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="password"], select {
+            width: 250px;
+            padding: 0.4em;
+            margin-bottom: 1em;
+        }
+
+        button {
+            padding: 0.5em 1em;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 1em;
+        }
+    </style>
+</head>
+<body>
+    <h2>Create New User</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% set seen_messages = [] %}
+        {% for category, message in messages %}
+            {% if message not in seen_messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+            {% set _ = seen_messages.append(message) %}
+            {% endif %}
+        {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="post">
+        <label for="username">Username:</label><br>
+        <input type="text" name="username" required><br>
+
+        <label for="password">Password:</label><br>
+        <input type="password" name="password" required><br>
+
+        <label for="role">Role:</label><br>
+        <select name="role">
+            <option value="worker">Worker</option>
+            <option value="admin">Admin</option>
+        </select><br>
+
+        <label>
+            <input type="checkbox" name="is_active" checked>
+            Active
+        </label><br><br>
+
+        <button type="submit">Create User</button>
+    </form>
+
+    <a href="{{ url_for('worker.dashboard') }}">← Back to Dashboard</a>
+</body>
+</html>

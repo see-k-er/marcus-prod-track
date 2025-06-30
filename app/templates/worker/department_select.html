@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Department</title>
+</head>
+<body>
+    <h2>Select Department</h2>
+    <p>Welcome, {{ current_user.username }}</p>
+
+    <ul>
+    {% for dept in departments %}
+        <li>
+            <a href="{{ url_for('worker.machine_planning', department_id=dept.id) }}">
+                {{ dept.name }}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('auth.logout') }}">Logout</a>
+</body>
+</html>

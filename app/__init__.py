@@ -1,23 +1,17 @@
 # app/__init__.py
 
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_login import LoginManager
+
 from dotenv import load_dotenv
 import os
 from app.routes.worker import worker_bp
 from app.routes.admin import admin_bp
 from app.routes.management import management_bp
+from app.extensions import db, migrate, login_manager
 
 
 # Load environment variables from .env
 load_dotenv()
-
-# Initialize extensions
-db = SQLAlchemy()
-migrate = Migrate()
-login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__)
@@ -54,4 +48,5 @@ def create_app():
 
 
 #app.config.from_object('config.Config')
+
 

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Machine Planning</title>
+</head>
+<body>
+    <h2>Machine Plan for {{ shift_name }} Shift</h2>
+    <form method="post">
+        <table border="1">
+            <tr>
+                <th>Machine</th>
+                <th>Status</th>
+            </tr>
+            {% for machine in machines %}
+            <tr>
+                <td>{{ machine.name }}</td>
+                <td>
+                    <select name="status_{{ machine.id }}">
+                        {% for option in ['Planned', 'Breakdown', 'No Plan'] %}
+                            <option value="{{ option }}" {% if plans.get(machine.id) == option %}selected{% endif %}>
+                                {{ option }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <button type="submit">Save Plan</button>
+    </form>
+    <br>
+    <a href="{{ url_for('worker.dashboard') }}">← Back to Department</a>
+</body>
+</html>
